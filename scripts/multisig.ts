@@ -1,7 +1,9 @@
+import { parseEther } from 'ethers'
 import { ethers } from 'hardhat'
-
+import { parse } from 'path'
+//getsigners help us to get address
 async function main() {
-  const [Admin1, Admin2, Admin3, Admin4, Admin5, spender] =
+  const [Admin1, Admin2, Admin3, Admin4, Admin5, spender,sender] =
     await ethers.getSigners()
   const Owners = [
     Admin1.address,
@@ -53,9 +55,18 @@ async function main() {
     parseInt(String(approval)),
     isActive
   )
+  const sendTransaction = sender.sendTransaction({ to:
+    multisig.target,value:parseEther("1000"),
+  });
+
+
+const transaction = await(await sendTransaction).wait();
+const senderBal = await ethers.provider.getBalance(sender.address);
+console.log(`Sender balance is : ${ethers.formatEther(senderBal)}`); 
 }
 
-// We recommend this pattern to be able to use async/await everywhere
+
+// We recommend this pattern to be able to use async/await everzzywhere
 // and properly handle errors.
 main().catch((error) => {
   console.error(error)
